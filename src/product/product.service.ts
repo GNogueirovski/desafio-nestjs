@@ -25,9 +25,24 @@ export class ProductService {
     });
 
     if (!product) {
-      throw new HttpException('Produto não encontrado', HttpStatus.NOT_FOUND);
+      throw new HttpException('Não existe um produto com esse ID', HttpStatus.NOT_FOUND);
     }
     return product;
+  }
+
+    async updateProduct(id: number, data: Prisma.ProductUpdateInput) {
+    const product = await this.getProductById(id);
+    return this.prisma.product.update({
+      where: { id },
+      data
+    });
+  }
+
+  async deleteProduct(id: number) {
+    await this.getProductById(id);
+    return this.prisma.product.delete({
+      where: { id }
+    });
   }
 
 }
